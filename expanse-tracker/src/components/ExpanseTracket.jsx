@@ -5,6 +5,8 @@ const ExpanseTracket = () => {
     const[amount,setAmount]=useState(0);
     const[category,setCategory]=useState("")
     const[list,setList]=useState([]);
+    const[editindex,setEditIndex]=useState(null);
+    const[expanse,setExpanse]=useState(0);
 
   return (
     <div className="min-h-screen bg-gray-100 p-5">
@@ -68,30 +70,97 @@ const ExpanseTracket = () => {
           </div>
 
           <button onClick={()=>{
-            setList([...list,{
+            if(editindex==null){
+               setList([...list,{
                 text:name,
                 money:amount,
                 option:category
             }])
+            }
+            else{
+              setList(list.map((item,index)=>{
+                if(index===editindex){
+
+                  return {
+                    ...item,
+                text:name,
+                money:amount,
+                option:category
+                  }
+
+                }
+                return item;
+              }))
+              setEditIndex(null);
+            }
             setName("")
             setAmount(0)
             setCategory("")
           }}
-           className="bg-violet-700 hover:bg-violet-900 text-white font-semibold rounded-lg p-2">Add Expanse</button>
+           className="bg-violet-700 hover:bg-violet-900 text-white 
+           font-semibold rounded-lg p-2">{editindex==null? "Add Expanse" :"update expanse"}</button>
         </div>
 
-        <ol>
+          <div className="flex justify-between mt-5">
+            <h1 className='font-bold text-xl'>Your Expanse</h1>
+            <button 
+             className="bg-violet-700 hover:bg-violet-900
+                        text-white font-semibold rounded-lg p-1.5"
+                        onClick={()=>setList([])}>Claer All</button>
+          </div>
+        <ol className="mt-5">
+           {/* Heading */}
+  <div className="flex font-bold border-b pb-2">
+    <span className="w-1/3">Name</span>
+    <span className="w-1/4">Amount</span>
+    <span className="w-1/4">Category</span>
+  </div>
             {list.map((item,index)=>{
                 return(
-                <li>
-                    <div>
-                        <span>{item.text}</span>
-                        <span>{item.money}</span>
-                        <span>{item.option}</span>
+                <li className="flex justify-between items-center mt-1 border-b py-2">
+
+        <div className="flex w-full items-center">
+          <span className="w-1/3">{item.text}</span>
+          <span className="w-1/4">₹{item.money}</span>
+          <span className="w-1/4">{item.option}</span>
+        </div>
+                    <div className="flex gap-3.5">
+                      <button
+                       className="bg-violet-700 hover:bg-violet-900
+                        text-white font-semibold rounded-lg p-1"
+                        onClick={()=>{
+                          setName(item.text)
+                          setAmount(item.money)
+                          setCategory(item.option)
+                          setEditIndex(index)
+                        }
+                        }>Edit</button>
+                      <button
+                       className="bg-violet-700 hover:bg-violet-900
+                        text-white font-semibold rounded-lg p-1"
+                        onClick={()=>setList(list.filter((item,i)=>i!=index))}>Delete</button>
                     </div>
                 </li> )
             })}
         </ol>
+
+          <div className="flex gap-5 items-center mt-3.5">
+    <button
+        className="bg-violet-700 hover:bg-violet-900
+        text-white font-semibold rounded-lg p-1.5 "
+        onClick={() => {
+            const total = list.reduce((total, item) => {
+                return total + Number(item.money);
+            }, 0);
+
+            setExpanse(total);
+        }}
+    >
+        Total Expense
+    </button>
+
+    <span className="font-semibold text-xl">{expanse}</span>
+</div>
       </div>
     </div>
   );

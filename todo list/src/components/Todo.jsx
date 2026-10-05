@@ -51,6 +51,7 @@ const Todo = () => {
                p-1.5 rounded-sm ' 
                onClick={()=>setListTodo([])}>Clear All</button>
             </div>
+            
             <ol className='mt-5'>
             { listtodo.map((item,index)=>(
               <li className='mt-1.5 flex justify-between w-1/2 ' key={index}>
