@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 
 const ExpanseTracket = () => {
     const[name,setName]=useState("");
@@ -7,6 +7,14 @@ const ExpanseTracket = () => {
     const[list,setList]=useState([]);
     const[editindex,setEditIndex]=useState(null);
     const[expanse,setExpanse]=useState(0);
+
+    useEffect(() => {
+    const total = list.reduce((total, item) => {
+        return total + Number(item.money);
+    }, 0);
+
+    setExpanse(total);
+}, [list]);
 
   return (
     <div className="min-h-screen bg-gray-100 p-5">
@@ -144,23 +152,13 @@ const ExpanseTracket = () => {
             })}
         </ol>
 
-          <div className="flex gap-5 items-center mt-3.5">
-    <button
-        className="bg-violet-700 hover:bg-violet-900
-        text-white font-semibold rounded-lg p-1.5 "
-        onClick={() => {
-            const total = list.reduce((total, item) => {
-                return total + Number(item.money);
-            }, 0);
-
-            setExpanse(total);
-        }}
-    >
-        Total Expense
-    </button>
-
-    <span className="font-semibold text-xl">{expanse}</span>
+    
+    <div className="flex gap-5 items-center mt-3.5">
+    <span className="font-semibold text-xl">
+        Total Expense: ₹{expanse}
+    </span>
 </div>
+
       </div>
     </div>
   );
